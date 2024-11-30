@@ -1,0 +1,23 @@
+﻿@model RoleDTO
+@{
+    ViewData["Title"] = "Role";
+    Layout = "~/Views/Shared/Menu.cshtml";
+}
+
+@section cssstyles {
+    <link href="~/css/register.css" rel="stylesheet" />
+}
+
+<div class="registration-container">
+    <h2>New Role</h2>
+    <form method="POST">
+        <div class="input-group">
+            <label for="fullname">Name</label>
+            <input type="text" asp-for=Name>
+            <span asp-validation-for="Name"></span>
+        </div>
+        <button type="submit" class="register-btn" asp-action="NewRole">Save</button>
+    </form>
+</div>
+
+

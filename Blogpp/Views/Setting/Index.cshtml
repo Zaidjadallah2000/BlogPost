@@ -1,0 +1,60 @@
+﻿@using Blogpp.data;
+@using Microsoft.AspNetCore.Identity;
+@inject UserManager<ApplicationUser> userManager
+@model SettingDTO
+@{
+    ViewData["Title"] = "Account Settings";
+    Layout = "~/Views/Shared/Menu.cshtml";
+    var currentUser = await userManager.GetUserAsync(User);
+}
+
+@section cssstyles {
+    <link href="~/css/setting.css" rel="stylesheet" />
+}
+
+<div class="settings-container">
+    <h1>Account Settings</h1>
+
+    <!-- Profile Information Section -->
+    <section class="settings-section">
+        <h2>Profile Information</h2>
+        <form method="post" class="settings-form">
+            <input type="hidden" asp-for="id" value="@currentUser.Id">
+
+            <div class="form-group">
+                <label for="full-name">Full Name</label>
+                <input type="text" asp-for="Name" placeholder="Enter your full name" class="form-control">
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="current-password">Current Password</label>
+                <input type="password" asp-for="CurrentPassword" placeholder="Enter current password" class="form-control">
+                <span asp-validation-for="CurrentPassword" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="new-password">New Password</label>
+                <input type="password" asp-for="NewPassword" placeholder="Enter new password" class="form-control">
+                <span asp-validation-for="NewPassword" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="confirm-password">Confirm New Password</label>
+                <input type="password" asp-for="ConfirmNewPassword" placeholder="Confirm new password" class="form-control">
+                <span asp-validation-for="ConfirmNewPassword" class="text-danger"></span>
+            </div>
+
+            <button type="submit" asp-action="updateProfile" class="btn-submit">Update Profile</button>
+        </form>
+    </section>
+
+    <!-- Account Actions Section -->
+    <!-- <section class="settings-section danger-section">
+        <h2>Danger Zone</h2>
+        <form method="post">
+            <button type="submit" class="btn-delete" asp-action="DeleteAccount">Delete Account</button>
+        </form>
+    </section>
+    -->
+</div>

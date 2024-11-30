@@ -1,0 +1,80 @@
+﻿@model VMPost
+@using Blogpp.Helpers
+@using Blogpp.data;
+@using Microsoft.AspNetCore.Identity;
+@inject UserManager<ApplicationUser> userManager
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/Menu.cshtml";
+
+    var currentUser = await userManager.GetUserAsync(User);
+    string UserId = null;
+    if (currentUser != null)
+    {
+        UserId = currentUser.Id;
+    }
+}
+
+@section cssstyles {
+    <link href="~/css/PostIndex.css" rel="stylesheet" />
+}
+
+@if (TempData["Message"] != null)
+{
+    <script>
+        Swal.fire({
+            title: '@TempData["Message"]',
+            icon: '@TempData["MessageType"]',
+            confirmButtonText: 'OK'
+        });
+    </script>
+}
+
+<div class="container">
+    <header class="text-center my-4">
+        <h1>Welcome to Our Blog</h1>
+        <p>Your daily source of inspiration and knowledge</p>
+    </header>
+
+    <h3 class="mt-4">Search and Filter Posts</h3>
+    <form method="get" class="d-flex gap-2 mb-4">
+        <input type="text" name="searchQuery" class="form-control" placeholder="Search by title or content" />
+        <select name="filterTopic" class="form-select">
+            <option value="">All Topics</option>
+            @foreach (var item in Model.topic)
+            {
+                <option value="@item.Name">@item.Name</option>
+            }
+        </select>
+        <button asp-action="SearchPosts" type="submit" class="btn btn-success">Search</button>
+    </form>
+
+    <!-- Display Posts -->
+    <div class="row">
+        @foreach (var post in Model.blogPost)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="post-card shadow-sm">
+                    <img src="~/Uploads/@post.ImageURL" alt="Post Image" class="post-image card-img-top" style="height: 200px; object-fit: cover;">
+                    <div class="post-content card-body">
+                        <h5 class="post-title card-title">@post.Title</h5>
+                        <div class="post-description card-text">
+                            @Html.Raw(MarkdownHelper.ConvertMarkdownToHtml(post.Content))
+                        </div>
+                        <div class="post-date text-muted">Posted on: @post.PostDate</div>
+                    </div>
+                    <div class="card-footer">
+                        <form method="post">
+                            @if (post.UserId == UserId && UserId != null)
+                            {
+                                <input type="submit" asp-action="deletePost" asp-route-id="@post.Id" value="Delete" class="btn btn-danger btn-sm" />
+                                <input type="submit" asp-action="EditPost" asp-route-id="@post.Id" value="Edit" class="btn btn-warning btn-sm" />
+                            }
+                        </form>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+

@@ -1,0 +1,33 @@
+﻿/* تحسين تنسيق الصفحة */
+.card {
+    margin-top: 30px;
+}
+
+.card-header {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+#preview {
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-top: 20px;
+    background-color: #f8f9fa;
+}
+
+.preview-heading {
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+.form-label {
+    font-weight: bold;
+    color: #333;
+}
+
+.form-control {
+    margin-top: 8px;
+}
+
+.btn {
+    width: 100%;
+    margin-top: 20px;
+}

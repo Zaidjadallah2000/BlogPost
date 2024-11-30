@@ -1,0 +1,60 @@
+﻿@model VMUsers
+@{
+    ViewData["Title"] = "NewUser";
+    Layout = "~/Views/Shared/Menu.cshtml";
+}
+
+@section cssstyles {
+    <link href="~/css/register.css" rel="stylesheet" />
+}
+
+<div class="registration-container">
+    <h2>Register</h2>
+    <form method="POST">
+        <div class="input-group">
+            <label for="fullname">Full Name</label>
+            <input type="text" asp-for="UserApp.Name" id="fullname" required />
+            <span asp-validation-for="UserApp.Name"></span>
+        </div>
+
+        <div class="input-group">
+            <label for="email">Email</label>
+            <input type="email" asp-for="UserApp.Email" id="email" required />
+            <span asp-validation-for="UserApp.Email"></span>
+        </div>
+
+        <div class="input-group">
+            <label for="username">Username</label>
+            <input type="text" asp-for="UserApp.UserName" id="username" required />
+            <span asp-validation-for="UserApp.UserName"></span>
+        </div>
+
+        <div class="input-group">
+            <label for="password">Password</label>
+            <input type="password" asp-for="UserApp.Password" id="password" required />
+            <span asp-validation-for="UserApp.Password"></span>
+        </div>
+
+        <div class="input-group">
+            <label for="confirm-password">Confirm Password</label>
+            <input type="password" asp-for="UserApp.ConPassword" id="confirm-password" required />
+            <span asp-validation-for="UserApp.ConPassword"></span>
+        </div>
+
+        <div class="input-group">
+            <label for="user-role">Select Role</label>
+            <select asp-for="UserApp.RoleId" id="user-role" required>
+                <option value="">-- Select a Role --</option>
+                @foreach (var item in Model.Roles)
+                {
+                    <option value="@item.Name">@item.Name</option>
+                }
+            </select>
+            <span asp-validation-for="UserApp.RoleId"></span>
+        </div>
+
+        <button type="submit" class="register-btn">Register</button>
+    </form>
+
+    <a class="nav-link btn" asp-controller="Account" asp-action="Index">Already have an account? Login</a>
+</div>

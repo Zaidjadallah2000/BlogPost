@@ -1,0 +1,88 @@
+﻿@model BlogPostDTO
+@using Blogpp.data;
+@using Microsoft.AspNetCore.Identity;
+@inject UserManager<ApplicationUser> userManager
+@{
+    ViewData["Title"] = "Create Post";
+    Layout = "~/Views/Shared/Menu.cshtml";
+    var currentUser = await userManager.GetUserAsync(User);
+}
+
+@section cssstyles {
+    <link href="~/css/createPost.css" rel="stylesheet" />
+}
+
+@if (TempData["Message"] != null)
+{
+    <script>
+        Swal.fire({
+            title: '@TempData["Message"]',
+            icon: '@TempData["MessageType"]',
+            confirmButtonText: 'OK'
+        });
+    </script>
+}
+
+<script>
+    var converter = new showdown.Converter();
+    var contentArea = document.getElementById("content");
+    var previewArea = document.getElementById("preview");
+
+    contentArea.addEventListener("input", function () {
+        previewArea.innerHTML = converter.makeHtml(contentArea.value);
+    });
+</script>
+
+<div class="container mt-5">
+    <div class="card shadow-lg">
+        <div class="card-header bg-primary text-white">
+            <h3>Create New Blog Post</h3>
+        </div>
+        <div class="card-body">
+            <form method="post" enctype="multipart/form-data">
+                <input asp-for="UserId" type="hidden" value="@currentUser.Id" />
+                <input asp-for="Id" type="hidden" />
+
+                <!-- Post Title -->
+                <div class="mb-3">
+                    <label for="title" class="form-label">Post Title</label>
+                    <input asp-for="Title" type="text" id="title" class="form-control" placeholder="Enter your post title">
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+
+                <!-- Post Content (Markdown Supported) -->
+                <div class="mb-3">
+                    <label for="content" class="form-label">Content (Markdown Supported)</label>
+                    <textarea asp-for="Content" id="content" class="form-control" rows="6" placeholder="Write your post content here..."></textarea>
+                    <span asp-validation-for="Content" class="text-danger"></span>
+                </div>
+
+                <!-- Topics -->
+                <div class="mb-3">
+                    <label for="topics" class="form-label">Topics</label>
+                    <input asp-for="Topic" type="text" id="topics" class="form-control" placeholder="Enter topics separated by commas">
+                    <span asp-validation-for="Topic" class="text-danger"></span>
+                </div>
+
+                <!-- Thumbnail Image -->
+                <div class="mb-3">
+                    <label for="thumbnail" class="form-label">Thumbnail Image</label>
+                    <input asp-for="file" type="file" id="thumbnail" class="form-control" accept="image/*">
+                    <span asp-validation-for="file" class="text-danger"></span>
+                </div>
+
+                <!-- Submit Button -->
+                @if (Convert.ToBoolean(ViewData["IsEdit"]))
+                {
+                    <button type="submit" asp-action="update" class="btn btn-success">Update Post</button>
+                }
+                else
+                {
+                    <button type="submit" asp-action="AddPost" class="btn btn-primary">Publish Post</button>
+                }
+
+            </form>
+        </div>
+    </div>
+</div>
+
